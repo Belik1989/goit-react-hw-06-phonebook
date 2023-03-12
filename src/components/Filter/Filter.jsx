@@ -1,9 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { addFilter } from 'redux/filterSlice';
 import { BiSearchAlt2 } from 'react-icons/bi';
 import { SearchBox, SearchInput } from './Filter.styled';
 
-export const Filter = ({ value, onInputHandler }) => {
+export const Filter = () => {
+  const dispatch = useDispatch();
+
+  const handleChange = e => {
+    e.preventDefault();
+    const name = e.target.value;
+    dispatch(addFilter(name));
+  };
   return (
     <SearchBox>
       <BiSearchAlt2 />
@@ -13,14 +21,9 @@ export const Filter = ({ value, onInputHandler }) => {
           variant="outlined"
           placeholder="Find contacts"
           type="text"
-          onChange={onInputHandler}
-          value={value}
+          onChange={handleChange}
         ></SearchInput>
       </label>
     </SearchBox>
   );
-};
-
-Filter.propTypes = {
-  onInputHandler: PropTypes.func.isRequired,
 };

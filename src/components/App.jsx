@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react';
-
 import { BsJournalBookmark } from 'react-icons/bs';
 import { MdNotListedLocation } from 'react-icons/md';
 
@@ -13,53 +11,56 @@ import {
   NoContactsSpan,
 } from './ContactsList/ContactsList.styled';
 import { Filter } from './Filter/Filter';
-import data from './data.json';
+// import data from './data.json';
+import { useSelector } from 'react-redux';
+import { getContacts } from 'redux/selectors';
 import { FormSection, PhoneBookBody } from './PhoneBook/PhoneBook.styled';
 
 export function App() {
-  const [contacts, setContacts] = useState(() => {
-    return JSON.parse(window.localStorage.getItem('contacts')) ?? data;
-  });
-  const [filter, setFilter] = useState('');
+  const contacts = useSelector(getContacts);
+  // const [contacts, setContacts] = useState(() => {
+  //   return JSON.parse(window.localStorage.getItem('contacts')) ?? data;
+  // });
+  // const [filter, setFilter] = useState('');
 
-  useEffect(() => {
-    const contacts = window.localStorage.getItem('contacts');
-    if (contacts) {
-      setContacts(JSON.parse(contacts));
-    } else setContacts(data);
-  }, []);
+  // useEffect(() => {
+  //   const contacts = window.localStorage.getItem('contacts');
+  //   if (contacts) {
+  //     setContacts(JSON.parse(contacts));
+  //   } else setContacts(data);
+  // }, []);
 
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
+  // useEffect(() => {
+  //   localStorage.setItem('contacts', JSON.stringify(contacts));
+  // }, [contacts]);
 
-  const addContact = newContact => {
-    if (
-      contacts.some(
-        contact => contact.name.toLowerCase() === newContact.name.toLowerCase()
-      )
-    ) {
-      alert(newContact.name + ' Contact is already in contacts');
-    } else {
-      setContacts(prevContacts => [newContact, ...prevContacts]);
-    }
-  };
+  // const addContact = newContact => {
+  //   if (
+  //     contacts.some(
+  //       contact => contact.name.toLowerCase() === newContact.name.toLowerCase()
+  //     )
+  //   ) {
+  //     alert(newContact.name + ' Contact is already in contacts');
+  //   } else {
+  //     setContacts(prevContacts => [newContact, ...prevContacts]);
+  //   }
+  // };
 
-  const deleteContact = contactId => {
-    setContacts(prevContacts =>
-      prevContacts.filter(contact => contact.id !== contactId)
-    );
-  };
+  // const deleteContact = contactId => {
+  //   setContacts(prevContacts =>
+  //     prevContacts.filter(contact => contact.id !== contactId)
+  //   );
+  // };
 
-  const filterHandler = event => {
-    setFilter(event.currentTarget.value);
-  };
+  // const filterHandler = event => {
+  //   setFilter(event.currentTarget.value);
+  // };
 
-  const showFilterList = (contacts, filter) => {
-    return contacts.filter(({ name }) =>
-      name.toLowerCase().includes(filter.toLowerCase())
-    );
-  };
+  // const showFilterList = (contacts, filter) => {
+  //   return contacts.filter(({ name }) =>
+  //     name.toLowerCase().includes(filter.toLowerCase())
+  //   );
+  // };
 
   return (
     <div
@@ -79,24 +80,22 @@ export function App() {
         </MainTitle>
 
         <FormSection>
-          <PhoneBook onSubmit={addContact} />
+          <PhoneBook />
         </FormSection>
         <ContactsSection>
           <ContactsTitle>Contacts</ContactsTitle>
-          <Filter onInputHandler={filterHandler}></Filter>
-          {contacts.length === 0 ? (
+          <Filter />
+          {contacts.contacts.length === 0 ? (
             <NoContactsSpan>
               <MdNotListedLocation />
               There're no contacts
             </NoContactsSpan>
           ) : (
-            <ContactsList
-              onDeleteContact={deleteContact}
-              filterList={showFilterList(contacts, filter)}
-            />
+            <ContactsList />
           )}
           <ContactsNumbers>
-            {contacts.length} {contacts.length > 1 ? 'contacts' : 'contact'}
+            {contacts.contacts.length}{' '}
+            {contacts.contacts.length > 1 ? 'contacts' : 'contact'}
           </ContactsNumbers>
         </ContactsSection>
       </PhoneBookBody>
